@@ -4,6 +4,7 @@ using System;
 using System.Linq.Expressions;
 using TechTalk.SpecFlow;
 using NUnit.Framework;
+using static Final_Project_Edgewords.Base_Methods.HelpfulMethods;
 [assembly: Parallelizable(ParallelScope.Fixtures)]
 [assembly: LevelOfParallelism(2)]
 
@@ -15,8 +16,6 @@ namespace Final_Project_Edgewords.StepDefinitions
         private readonly ScenarioContext _scenarioContext;
         private IWebDriver _driver;
         private string _baseURL;
-        private string username;
-        private string password;
         //This POM page is used across multiple steps and thus is defined here
         CartPagePOM cartPage;
 
@@ -55,10 +54,10 @@ namespace Final_Project_Edgewords.StepDefinitions
         [When(@"I Add an Item to my Cart")]
         public void WhenIAddAnItemToMyCart() //This step goes to the shop page and places an item into the cart before going to the cart page
         {
-            MainPagePOM mainPage = new MainPagePOM(_driver);
+            ShopPagePOM shopPage = new ShopPagePOM(_driver);
             HeadingLinksPOM headers = new HeadingLinksPOM(_driver);
             headers.ClickShop();
-            mainPage.ClickOnItem();
+            shopPage.ClickOnItem();
             headers.ClickCart();
         }
 
@@ -77,7 +76,7 @@ namespace Final_Project_Edgewords.StepDefinitions
             decimal originalPriceNum = ConvertPriceToDec(subTotalText); 
             decimal discountAmount = originalPriceNum * percentage / 100; //the discount amount is calculated by the original price / the percent given in the feature file * 100
             decimal priceWithDiscount = originalPriceNum - discountAmount; //This amount is then taken from the original price
-            Thread.Sleep(1000);
+            WaitForElmStatic(_driver, 3, By.CssSelector(".cart-discount .woocommerce-Price-amount"));
             string siteCalculatedDiscount = cartPage.CaptureCouponDiscountField(); //when the coupon has been entered the new field added is captured and converted
             Console.WriteLine("Site's calculated discount amount is : " + siteCalculatedDiscount);
             decimal siteCalcDiscNum = ConvertPriceToDec(siteCalculatedDiscount); 
@@ -120,11 +119,9 @@ namespace Final_Project_Edgewords.StepDefinitions
             cartPage.ProceedToCheckout();
             CheckoutPage checkoutPage = new CheckoutPage(_driver);
             checkoutPage.FillCheckoutForm(); //the checkout details are filled in
-            Thread.Sleep(2000);
+            WaitForElmStatic(_driver,3,By.)
             checkoutPage.ed();
-            Thread.Sleep(2000);
             checkoutPage.CheckPayments();
-            Thread.Sleep(2000);
             checkoutPage.PlaceOrder(); //the order is placed
             OrderPagePOM order = new OrderPagePOM(_driver);
             Thread.Sleep(1000);

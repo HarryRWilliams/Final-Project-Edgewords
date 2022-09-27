@@ -1,4 +1,5 @@
 ﻿using Final_Project_Edgewords.POMPages;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
@@ -17,14 +18,6 @@ namespace Final_Project_Edgewords.Base_Methods
             WebDriverWait myWait = new WebDriverWait(driver, TimeSpan.FromSeconds(Seconds));
             myWait.Until(drv => drv.FindElement(locator).Displayed);
         }
-
-        /**
-        public static void TakeScreenshot(IWebDriver driver, string FileName)
-        {
-            ITakesScreenshot ssdriver = driver as ITakesScreenshot;
-            Screenshot file = ssdriver.GetScreenshot();
-            file.SaveAsFile(@"C:\Screenshots\" + FileName + ".png", ScreenshotImageFormat.Png);
-        }**/
 
         //This method takes a screenshot of a specific element so it can be attached in a report
         public static void TakeScreenshotElement (IWebElement elm, string Filename) //This takes a screenshot of an element and attaches it to the current test report

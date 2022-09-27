@@ -16,7 +16,6 @@ namespace Final_Project_Edgewords.StepDefinitions
     {
         private IWebDriver driver;
         private ScenarioContext _scenarioContext;
-        protected string baseUrl;
         public Hooks(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
