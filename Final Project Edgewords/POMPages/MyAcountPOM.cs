@@ -19,8 +19,9 @@ namespace Final_Project_Edgewords.POMPages
 
         //locators
         IWebElement orders => driver.FindElement(By.LinkText("Orders"));
-        IWebElement orderNumberCapture => driver.FindElement(By.CssSelector(".woocommerce-orders-table__cell-order-number > a"));
-        IWebElement logout => driver.FindElement(By.LinkText("Logout"));
+        IWebElement AccountorderNumberCapture => driver.FindElement(By.CssSelector(".woocommerce-orders-table__cell-order-number > a"));
+        IWebElement AccountorderNumberTable => driver.FindElement(By.CssSelector(".woocommerce-orders-table__cell-order-number"));
+        IWebElement logout => driver.FindElement(By.LinkText("Logout")); 
         public void ClickOrders()
         {
             orders.Click();
@@ -29,10 +30,10 @@ namespace Final_Project_Edgewords.POMPages
         {
             if (browser != "firefox")
             {
-                SettingUpScreenhot(orderNumberCapture);
+                SettingUpScreenhot(AccountorderNumberTable);
             }
-            TakeScreenshotElement(orderNumberCapture, "Acount Page Order Number");
-            string orderNumberText = orderNumberCapture.Text.Trim(new Char[] { '#' });
+            TakeScreenshotElement(AccountorderNumberTable, "Acount Page Order Number");
+            string orderNumberText = AccountorderNumberCapture.Text.Trim(new Char[] { '#' });
             //Console.WriteLine(orderNumberText);
             int orderNumber = Convert.ToInt16(orderNumberText);
             return orderNumber;

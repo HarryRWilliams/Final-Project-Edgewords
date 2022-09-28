@@ -17,16 +17,16 @@ namespace Final_Project_Edgewords.POMPages
             this.driver = driver;
         }
         IWebElement orderNumber => driver.FindElement(By.CssSelector(".order > strong")); //fetch the field that contains the order number
-        IWebElement accountLink => driver.FindElement(By.LinkText("My account"));
+        IWebElement orderPageTable => driver.FindElement(By.CssSelector(".order_details.woocommerce-thankyou-order-details > .order"));
 
 
         public int CaptureOrderNumber(string browser) //capture the order string from the page and convert it to a number
         {
             if (browser != "firefox")
             {
-                SettingUpScreenhot(orderNumber);
+                SettingUpScreenhot(orderPageTable);
             }
-            TakeScreenshotElement(orderNumber, "Order Page Number");
+            TakeScreenshotElement(orderPageTable, "Order Page Number");
             string CapordernumberText = orderNumber.Text;
           //  Console.WriteLine(CapordernumberText);
             int capOrderNumber = Convert.ToInt16(CapordernumberText);
