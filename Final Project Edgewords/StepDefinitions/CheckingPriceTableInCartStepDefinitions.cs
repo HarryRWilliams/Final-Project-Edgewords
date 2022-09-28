@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using TechTalk.SpecFlow;
 using NUnit.Framework;
 using static Final_Project_Edgewords.Base_Methods.HelpfulMethods;
+using Newtonsoft.Json.Linq;
+
 [assembly: Parallelizable(ParallelScope.Fixtures)]
 [assembly: LevelOfParallelism(2)]
 
@@ -38,9 +40,11 @@ namespace Final_Project_Edgewords.StepDefinitions
             string username = Environment.GetEnvironmentVariable("USERNAME");
             string password = Environment.GetEnvironmentVariable("PASSWORD");
             //The website is accessed and logged into 
-            _driver.Url = (_baseURL + "//my-account/");
+           // _driver.Url = ("https://www.edgewordstraining.co.uk/demo-site//my-account/");
+             _driver.Url = (_baseURL + "//my-account/");
             LoginPagePOM login = new LoginPagePOM(_driver);
-            bool DidWeLogin = login.LoginWithValidCredentials(username, password); 
+            // bool DidWeLogin = login.LoginWithValidCredentials(username, password); 
+            bool DidWeLogin = login.LoginWithValidCredentials("harry.williams@nfocus.co.uk", "Passforex1");
             try
             {
                 Assert.IsTrue(DidWeLogin, "We did not login"); //If no warning message appears then login was successful otherwise the test has failed
@@ -80,6 +84,8 @@ namespace Final_Project_Edgewords.StepDefinitions
             string siteCalculatedDiscount = cartPage.CaptureCouponDiscountField(); //when the coupon has been entered the new field added is captured and converted
             Console.WriteLine("Site's calculated discount amount is : " + siteCalculatedDiscount);
             decimal siteCalcDiscNum = ConvertPriceToDec(siteCalculatedDiscount); 
+
+
             try //the discount amount should be equal to the sum calculated above if it is not then the test fails
             {
                 Console.WriteLine("Original price is " + originalPriceNum + " Discount amount is " + discountAmount + " Site calculated discount is " + siteCalcDiscNum);
@@ -119,10 +125,12 @@ namespace Final_Project_Edgewords.StepDefinitions
             cartPage.ProceedToCheckout();
             CheckoutPage checkoutPage = new CheckoutPage(_driver);
             checkoutPage.FillCheckoutForm(); //the checkout details are filled in
-            WaitForElmStatic(_driver,3,By.)
-            checkoutPage.ed();
+            Thread.Sleep(1000);
+            //WaitForElmStatic(_driver, 10, By.Id("place_order"));
+           // checkoutPage.ed();
             checkoutPage.CheckPayments();
-            checkoutPage.PlaceOrder(); //the order is placed
+            //the order is placed
+            checkoutPage.PlaceOrder();
             OrderPagePOM order = new OrderPagePOM(_driver);
             Thread.Sleep(1000);
 

@@ -1,0 +1,41 @@
+<Playlist Version="2.0">
+  <Rule Name="Includes" Match="Any">
+    <Rule Match="All">
+      <Property Name="Solution" />
+      <Rule Match="Any">
+        <Rule Match="All">
+          <Property Name="Project" Value="Final Project Edgewords" />
+          <Rule Match="Any">
+            <Rule Match="All">
+              <Property Name="Namespace" Value="Final_Project_Edgewords.Features" />
+              <Rule Match="Any">
+                <Rule Match="All">
+                  <Property Name="Class" Value="CheckingPriceTableInCartFeature" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="Final_Project_Edgewords.Features.CheckingPriceTableInCartFeature.CheckingThatASingleItemIsPricedCorrectly" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="CheckingThatASingleItemIsPricedCorrectly" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+                <Rule Match="All">
+                  <Property Name="Class" Value="OrderingAnItemFeature" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="Final_Project_Edgewords.Features.OrderingAnItemFeature.CreatingAnOrderWithARetainableNumber" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="CreatingAnOrderWithARetainableNumber" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+              </Rule>
+            </Rule>
+          </Rule>
+        </Rule>
+      </Rule>
+    </Rule>
+  </Rule>
+</Playlist>

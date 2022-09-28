@@ -1,0 +1,78 @@
+<test-run id="2" duration="23.664457" testcasecount="2" total="2" passed="1" failed="1" inconclusive="0" skipped="0" result="Failed" start-time="2022-09-27T 21:06:04Z" end-time="2022-09-27T 21:06:19Z">
+  <test-suite type="Assembly" name="Final Project Edgewords.dll" fullname="C:\Users\HarryWilliams\source\repos\Final Project Edgewords\Final Project Edgewords\bin\Debug\net6.0\Final Project Edgewords.dll" total="2" passed="1" failed="1" inconclusive="0" skipped="0" result="Failed" start-time="2022-09-27T 21:06:04Z" end-time="2022-09-27T 21:06:19Z" duration="23.664457">
+    <test-suite type="TestSuite" name="Final_Project_Edgewords" fullname="Final_Project_Edgewords" total="2" passed="1" failed="1" inconclusive="0" skipped="0" result="Failed" start-time="2022-09-27T 21:06:04Z" end-time="2022-09-27T 21:06:19Z" duration="23.664457">
+      <test-suite type="TestSuite" name="Features" fullname="Final_Project_Edgewords.Features" total="2" passed="1" failed="1" inconclusive="0" skipped="0" result="Failed" start-time="2022-09-27T 21:06:04Z" end-time="2022-09-27T 21:06:19Z" duration="23.664457">
+        <test-suite type="TestFixture" name="CheckingPriceTableInCartFeature" fullname="Final_Project_Edgewords.Features.CheckingPriceTableInCartFeature" classname="Final_Project_Edgewords.Features.CheckingPriceTableInCartFeature" total="1" passed="0" failed="1" inconclusive="0" skipped="0" result="Failed" start-time="2022-09-27T 21:06:04Z" end-time="2022-09-27T 21:06:14Z" duration="9.308493">
+          <test-case name="CheckingThatASingleItemIsPricedCorrectly" fullname="Final_Project_Edgewords.Features.CheckingPriceTableInCartFeature.CheckingThatASingleItemIsPricedCorrectly" methodname="CheckingThatASingleItemIsPricedCorrectly" classname="CheckingPriceTableInCartFeature" result="Failed" start-time="2022-09-27T 21:06:04Z" end-time="2022-09-27T 21:06:14Z" duration="9.308493" asserts="0" seed="912169715">
+            <properties>
+              <property name="Category" value="tag1" />
+            </properties>
+            <output><![CDATA[No browser or unknown browser
+Using Chrome
+Given I have Logged into my Account
+TechTalk.SpecFlow.ScenarioContext
+Returning true - did log in
+-> done: CheckingPriceTableInCartStepDefinitions.GivenIHaveLoggedIntoMyAccount() (1.9s)
+When I Add an Item to my Cart
+-> done: CheckingPriceTableInCartStepDefinitions.WhenIAddAnItemToMyCart() (1.9s)
+And I enter the Coupon Code
+-> done: CheckingPriceTableInCartStepDefinitions.WhenIEnterTheCouponCode() (0.1s)
+Then the Total Price Takes 15% off of the Original Price
+Sub Total found is £18.00
+Site's calculated discount amount is : £3.60
+Original price is 18.00 Discount amount is 2.70 Site calculated discount is 3.60
+-> error: Multiple failures or warnings in test:
+  1)   Expected: 3.6m
+  But was:  2.7m
+
+  2) Site does not give 15% off instead it was 20.0%
+ (1.1s)
+And Logout of My Account
+-> skipped because of previous errors
+
+]]></output>
+            <failure>
+              <message>Multiple failures or warnings in test:
+  1)   Expected: 3.6m
+  But was:  2.7m
+
+  2) Site does not give 15% off instead it was 20.0%
+</message>
+              <stack-trace>   at Final_Project_Edgewords.StepDefinitions.CheckingPriceTableInCartStepDefinitions.ThenTheTotalPriceTakesOffOfTheOriginalPrice(Int32 percentage) in C:\Users\HarryWilliams\source\repos\Final Project Edgewords\Final Project Edgewords\StepDefinitions\CheckingPriceTableInCartStepDefinitions.cs:line 95
+   at TechTalk.SpecFlow.Bindings.BindingInvoker.InvokeBinding(IBinding binding, IContextManager contextManager, Object[] arguments, ITestTracer testTracer, TimeSpan&amp; duration)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.ExecuteStepMatch(BindingMatch match, Object[] arguments, TimeSpan&amp; duration)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.ExecuteStep(IContextManager contextManager, StepInstance stepInstance)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.OnAfterLastStep()
+   at TechTalk.SpecFlow.TestRunner.CollectScenarioErrors()
+   at Final_Project_Edgewords.Features.CheckingPriceTableInCartFeature.ScenarioCleanup()
+   at Final_Project_Edgewords.Features.CheckingPriceTableInCartFeature.CheckingThatASingleItemIsPricedCorrectly() in C:\Users\HarryWilliams\source\repos\Final Project Edgewords\Final Project Edgewords\Features\Checking Price Table in Cart.feature:line 11
+</stack-trace>
+            </failure>
+          </test-case>
+        </test-suite>
+        <test-suite type="TestFixture" name="OrderingAnItemFeature" fullname="Final_Project_Edgewords.Features.OrderingAnItemFeature" classname="Final_Project_Edgewords.Features.OrderingAnItemFeature" total="1" passed="1" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2022-09-27T 21:06:04Z" end-time="2022-09-27T 21:06:19Z" duration="14.355964">
+          <test-case name="CreatingAnOrderWithARetainableNumber" fullname="Final_Project_Edgewords.Features.OrderingAnItemFeature.CreatingAnOrderWithARetainableNumber" methodname="CreatingAnOrderWithARetainableNumber" classname="OrderingAnItemFeature" result="Passed" start-time="2022-09-27T 21:06:04Z" end-time="2022-09-27T 21:06:19Z" duration="14.355964" asserts="0" seed="1998295819">
+            <properties>
+              <property name="Category" value="tag1" />
+            </properties>
+            <output><![CDATA[No browser or unknown browser
+Using Chrome
+Given I have Logged into my Account
+TechTalk.SpecFlow.ScenarioContext
+Returning true - did log in
+-> done: CheckingPriceTableInCartStepDefinitions.GivenIHaveLoggedIntoMyAccount() (2.4s)
+When I Add an Item to my Cart
+-> done: CheckingPriceTableInCartStepDefinitions.WhenIAddAnItemToMyCart() (2.2s)
+Then I am given an order number which matches between the order and account page
+Order number from Order Page is3261
+Order number from My Account is 3261
+-> done: CheckingPriceTableInCartStepDefinitions.ThenIAmGivenAnOrderNumberWhichMatchesBetweenTheOrderAndAccountPage() (5.1s)
+
+]]></output>
+          </test-case>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <errors />
+  </test-suite>
+</test-run>

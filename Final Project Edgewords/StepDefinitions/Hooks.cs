@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Newtonsoft.Json.Linq;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
@@ -23,9 +24,12 @@ namespace Final_Project_Edgewords.StepDefinitions
         [Before]
         public void Setup()
         {
-            string username = Environment.GetEnvironmentVariable("USERNAME");
-            string password = Environment.GetEnvironmentVariable("PASSWORD");
-            string browser = Environment.GetEnvironmentVariable("BROWSER");
+             string username = Environment.GetEnvironmentVariable("USERNAME");
+            //string username = Environment.GetEnvironmentVariable("harry.williams @nfocus.co.uk");
+             string password = Environment.GetEnvironmentVariable("PASSWORD");
+          //  string password = Environment.GetEnvironmentVariable("Passforex1");
+             string browser = Environment.GetEnvironmentVariable("BROWSER");
+           // string browser = Environment.GetEnvironmentVariable("chrome");
             ChromeOptions Options = new ChromeOptions();
             switch (browser)
             {
@@ -47,7 +51,8 @@ namespace Final_Project_Edgewords.StepDefinitions
                     break;
             }
             _scenarioContext["mydriver"] = driver;
-            string baseUrl = Environment.GetEnvironmentVariable("BASEURL");
+            // string baseUrl = Environment.GetEnvironmentVariable("BASEURL");
+            string baseUrl = "https://www.edgewordstraining.co.uk/demo-site";
             driver.Url = baseUrl;
             _scenarioContext["myurl"] = baseUrl;
             driver.Manage().Window.Maximize();

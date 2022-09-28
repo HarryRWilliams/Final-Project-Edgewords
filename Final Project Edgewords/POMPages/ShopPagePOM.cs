@@ -22,5 +22,6 @@ namespace Final_Project_Edgewords.POMPages
             addBeanieToCart.Click(); //click on the add to cart option under the beanie
             WaitForElmStatic(driver, 10, By.LinkText("View cart")); //then wait for view cart to appear
         }
+        string ef;
     }
 }
