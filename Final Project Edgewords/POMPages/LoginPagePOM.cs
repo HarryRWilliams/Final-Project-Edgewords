@@ -23,18 +23,18 @@ namespace Final_Project_Edgewords.POMPages
 
 
         //Service Methods
-        public LoginPagePOM SetUsername(string username)
+        public LoginPagePOM SetUsername(string username) //Enter the username
         {
             usernameField.SendKeys(username);
             return this;
         }
-        public LoginPagePOM SetPassword(string password)
+        public LoginPagePOM SetPassword(string password)//Enter the password
         {
             passwordField.SendKeys(password);
             return this;
         }
 
-        public void ClickLogin()
+        public void ClickLogin() //Click login
         {
             loginButton.Click();
         }

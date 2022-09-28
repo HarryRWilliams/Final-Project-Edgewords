@@ -19,15 +19,13 @@ namespace Final_Project_Edgewords.StepDefinitions
         private readonly ScenarioContext _scenarioContext;
         private IWebDriver _driver;
         private string _baseURL;
-        private string couponWord;
+        private string couponWord; //a string to store the scenario word currently being used
         private string browser;
         //This POM page is used across multiple steps and thus is defined here
         CartPagePOM cartPage;
 
-        //use class or object for billing info
-        //make top nav a seperate page
-
-        public CheckingPriceTableInCartStepDefinitions(ScenarioContext scenarioContext)
+        //a constructor that sets up later needed variables
+        public CheckingPriceTableInCartStepDefinitions(ScenarioContext scenarioContext) 
         {
             _scenarioContext = scenarioContext;
             Console.WriteLine(scenarioContext);
@@ -43,22 +41,25 @@ namespace Final_Project_Edgewords.StepDefinitions
             //The username and password are gotten from an external source
             string username = Environment.GetEnvironmentVariable("USERNAME");
             string password = Environment.GetEnvironmentVariable("PASSWORD");
+
             //The website is accessed and logged into 
            // _driver.Url = ("https://www.edgewordstraining.co.uk/demo-site//my-account/");
              _driver.Url = (_baseURL + "//my-account/");
             LoginPagePOM login = new LoginPagePOM(_driver);
             try
             {
-                Assert.IsTrue(login.LoginWithValidCredentials(username, password), "We did not login"); //If no warning message appears then login was successful otherwise the test has failed
+                //If Login credentials returned true login was successful
+                Assert.IsTrue(login.LoginWithValidCredentials(username, password), "We did not login");
             }
             catch
             {
+                //Otherwise fail the test
                 Assert.Fail("Login was unsucessful");
             }
         }
-
+        //This step goes to the shop page and places an item into the cart before going to the cart page
         [When(@"I Add an Item to my Cart")]
-        public void WhenIAddAnItemToMyCart() //This step goes to the shop page and places an item into the cart before going to the cart page
+        public void WhenIAddAnItemToMyCart()
         {
             ShopPagePOM shopPage = new ShopPagePOM(_driver);
             HeadingLinksPOM headers = new HeadingLinksPOM(_driver);
@@ -75,7 +76,7 @@ namespace Final_Project_Edgewords.StepDefinitions
             Console.WriteLine("Coupon read in is " + tableWord);
             try
             {
-                Assert.IsTrue(cartPage.EnterCouponCode(tableWord)); //enter the feature file word into the coupon field)
+                Assert.IsTrue(cartPage.EnterCouponCode(tableWord)); //enter the feature file word into the coupon field and see if it's valid
             }
             catch
             {
@@ -87,69 +88,85 @@ namespace Final_Project_Edgewords.StepDefinitions
         public void ThenTheTotalPriceTakesOffOfTheOriginalPrice(int percentage)
         {
             Console.WriteLine("Browser from def is" + browser);
-            cartPage.TakePicOfPrice(browser,couponWord); //A screenshot is taken of the price table element
-            string subTotalText = cartPage.CaptureSubTotal(); //The text in the subtotal field is captured and converted into a useable number rather than a word
+            //A screenshot is taken of the price table the browser decides if the picture needs to be setup the word is added to the file
+            cartPage.TakePicOfPrice(browser, couponWord);
+
+            //The text in the subtotal field is captured and converted into a useable number rather than a word
+            string subTotalText = cartPage.CaptureSubTotal();
             Console.WriteLine("Sub Total found is " + subTotalText);
-            decimal originalPriceNum = ConvertPriceToDec(subTotalText); 
-            decimal discountAmount = originalPriceNum * percentage / 100; //the discount amount is calculated by the original price / the percent given in the feature file * 100
-            decimal priceWithDiscount = originalPriceNum - discountAmount; //This amount is then taken from the original price
-           
-            
-            
+            decimal originalPriceNum = ConvertPriceToDec(subTotalText);
+
+            //the discount amount is calculated by the original price / the percent given in the feature file * 100
+            decimal discountAmount = originalPriceNum * percentage / 100;
+            //This amount is then taken from the original price
+            decimal priceWithDiscount = originalPriceNum - discountAmount;
+
+            //wait for the coupon to be entered into the system
             WaitForElmStatic(_driver, 1, By.CssSelector(".cart-discount .woocommerce-Price-amount"));
-            string siteCalculatedDiscount = cartPage.CaptureCouponDiscountField(); //when the coupon has been entered the new field added is captured and converted
-            Console.WriteLine("Coupon word entered was " + couponWord);
-            cartPage.RemoveCoupon();
-            if (couponWord !="edgewords" && siteCalculatedDiscount != null)
-            {
-                Assert.Fail("Coupon should not have applied");
-            }
+            //when the coupon has been entered the new field added is captured and converted
+            string siteCalculatedDiscount = cartPage.CaptureCouponDiscountField();
             Console.WriteLine("Site's calculated discount amount is : " + siteCalculatedDiscount);
-            decimal siteCalcDiscNum = ConvertPriceToDec(siteCalculatedDiscount); 
-            try //the discount amount should be equal to the sum calculated above if it is not then the test fails
+            //Clear the coupon to enable a clean test next time it's run
+            cartPage.RemoveCoupon();
+            //Convert the discount number to a decimal
+            decimal siteCalcDiscNum = ConvertPriceToDec(siteCalculatedDiscount);
+
+            //the discount amount should be equal to the sum calculated above if it is not then the test fails
+            try
             {
                 Console.WriteLine("Original price is " + originalPriceNum + " Discount amount is " + discountAmount + " Site calculated discount is " + siteCalcDiscNum);
+                //Check that the site's discount amount is equal to what it should be
                 Assert.That(discountAmount, Is.EqualTo(siteCalcDiscNum));
             }
             catch
             {
-                decimal actualDiscountPercent = siteCalcDiscNum / originalPriceNum * 100; //this works out what discount percent the coupon did take off
-                Assert.Fail("Site does not give " + percentage + "% off instead it was " + actualDiscountPercent +"%");
+                //If it wasn't this works out what discount percent the coupon did take off
+                decimal actualDiscountPercent = siteCalcDiscNum / originalPriceNum * 100;
+                Assert.Fail("Site does not give " + percentage + "% off instead it was " + actualDiscountPercent + "%");
             }
-            //Assert.That(discountAmount, Is.EqualTo(siteCalcDiscNum));
-
-            string shippingPriceText = cartPage.CaptureShippingPrice(); //the shipping price is then caputured converted and added to the sum
+            //the shipping price is caputured converted and added to the sum
+            string shippingPriceText = cartPage.CaptureShippingPrice();
             Console.WriteLine("Site shipping price is:" + shippingPriceText);
             decimal shippingPriceNum = ConvertPriceToDec(shippingPriceText);
-            //finding the total price and comparing it to the site
-            decimal TotalPrice = originalPriceNum - discountAmount + shippingPriceNum; //the total price is calculated
-            string siteCalcTot = cartPage.CaptureTotalPrice(); //the sites amount is captured and converted
+
+            //the total price is calculated
+            decimal TotalPrice = originalPriceNum - discountAmount + shippingPriceNum;
+            //the site's calculated total is captured and converted
+            string siteCalcTot = cartPage.CaptureTotalPrice();
             Console.WriteLine("Site calculated total is " + siteCalcTot);
             decimal siteCalcTotNum = ConvertPriceToDec(siteCalcTot);
-              Assert.That(siteCalcTotNum, Is.EqualTo(TotalPrice)); //if these are not the same then the test will fail
+            //Check that the total price is correct
+            Assert.That(siteCalcTotNum, Is.EqualTo(TotalPrice));
         }
 
         [Then(@"I am given an order number which matches between the order and account page")]
         public void ThenIAmGivenAnOrderNumberWhichMatchesBetweenTheOrderAndAccountPage()
         {
+            //Go to the checkout page
             CartPagePOM cartPage = new CartPagePOM(_driver);
             cartPage.ProceedToCheckout();
             CheckoutPage checkoutPage = new CheckoutPage(_driver);
-            checkoutPage.FillCheckoutForm(); //the checkout details are filled in
+            //the checkout details are filled in
+            checkoutPage.FillCheckoutForm();
             Thread.Sleep(1000);
+            //Check payments is selected
             checkoutPage.CheckPayments();
-            //the order is placed
+            //the order is placed and the order page is accessed
             checkoutPage.PlaceOrder();
             OrderPagePOM order = new OrderPagePOM(_driver);
+            //Wait for the page to load
             WaitForElmStatic(_driver, 1, By.CssSelector(".order > strong"));
-
-            int recievedOrderNumber = order.CaptureOrderNumber(browser); //the order page will give an order number which is captured
+            //the order page will give an order number which is captured
+            int recievedOrderNumber = order.CaptureOrderNumber(browser); 
             Console.WriteLine("Order number from Order Page is " + recievedOrderNumber);
+            //The account page is accessed
             HeadingLinksPOM headingLinks = new HeadingLinksPOM(_driver);
             headingLinks.ClickMyAccount();
             MyAcountPOM myAcount = new MyAcountPOM(_driver);
+            //The account orders are accessed
             myAcount.ClickOrders();
-            int accountOrderNumber = myAcount.GetOrderNumber(browser); //from the account page an order number will be displayed again and captured
+            //from the account page an order number will be displayed again and captured
+            int accountOrderNumber = myAcount.GetOrderNumber(browser);
             Console.WriteLine("Order number from My Account is " + accountOrderNumber);
 
             try //if the two order numbers are not equal the test will fail
@@ -161,8 +178,8 @@ namespace Final_Project_Edgewords.StepDefinitions
                 Assert.Fail("Order numbers do not match on the order page it says " + recievedOrderNumber + " but on the account page it says" + accountOrderNumber);
             }
         }
-
-        public decimal ConvertPriceToDec(string inputString) //this small function takes the string given to it takes off the price symbol and returns it as a decimal
+        //this small function takes the string given to it takes off the price symbol and returns it as a decimal
+        public decimal ConvertPriceToDec(string inputString) 
         {
             decimal convertedDec = System.Convert.ToDecimal(inputString.Trim(new Char[] { '£' }));
             return convertedDec;

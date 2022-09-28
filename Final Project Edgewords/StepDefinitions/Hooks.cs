@@ -20,10 +20,6 @@ namespace Final_Project_Edgewords.StepDefinitions
     {
         private IWebDriver driver;
         private ScenarioContext _scenarioContext;
-        string browser;
-        HeadingLinksPOM headingLinks;
-
-        CartPagePOM cartPagePOM;    
         public Hooks(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
@@ -32,12 +28,9 @@ namespace Final_Project_Edgewords.StepDefinitions
         [Before]
         public void Setup()
         {
-             string username = Environment.GetEnvironmentVariable("USERNAME");
-            //string username = Environment.GetEnvironmentVariable("harry.williams @nfocus.co.uk");
-             string password = Environment.GetEnvironmentVariable("PASSWORD");
-          //  string password = Environment.GetEnvironmentVariable("Passforex1");
-             browser = Environment.GetEnvironmentVariable("BROWSER");
-           // string browser = Environment.GetEnvironmentVariable("chrome");
+            //The Browser is found from the secret file or console
+            string browser = Environment.GetEnvironmentVariable("BROWSER");
+            //The options are created here so the same name can be used across cases
             ChromeOptions Options = new ChromeOptions();
             switch (browser)
             {
@@ -48,42 +41,51 @@ namespace Final_Project_Edgewords.StepDefinitions
                 case "chrome":
                     driver = new ChromeDriver();
                     Options.AcceptInsecureCertificates = true;
+                    _scenarioContext["myBrowser"] = browser;
                     break;
                 case "edge":
                     driver = new EdgeDriver();
+                    _scenarioContext["myBrowser"] = browser;
                     break;
                 default:
                     Console.WriteLine("No browser or unknown browser");
                     Console.WriteLine("Using Chrome");
                     driver = new ChromeDriver();
                     Options.AcceptInsecureCertificates = true;
+                    _scenarioContext["myBrowser"] = browser;
                     break;
             }
+            //This is stored in scenario context to be used later
             _scenarioContext["mydriver"] = driver;
-        //    Console.WriteLine("In start browser is " + browser);
+            //The URL is retrieved from the console or secret file
              string baseUrl = Environment.GetEnvironmentVariable("BASEURL");
-           // string baseUrl = "https://www.edgewordstraining.co.uk/demo-site";
+            //The driver is then taken to this url
             driver.Url = baseUrl;
+            //The URL is then stored for later use
             _scenarioContext["myurl"] = baseUrl;
             driver.Manage().Window.Maximize();
-            driver.FindElement(By.CssSelector("body > p > a")).Click();
+            HeadingLinksPOM header = new HeadingLinksPOM(driver);
+            //The pop up informing about the site being a test site is dismissed
+            header.ClickDismiss();
         }
         [After("@CheckPrice")]
         public void TearDownPrice()
         {
+            //The cart is emptied 
             ClearCart();
+            //The site is logged out of
             LogOut();
             driver.Quit();
-            //Add clear cart to this
         }
 
         [After("@OrderItem")]
         public void TearDownOrder()
         {
+            //The site is logged out of
             LogOut();
             driver.Quit();
         }
-
+        //This function ensures the cart can be cleared no matter which page you started from ready for the next clean test
         public void ClearCart()
         {
             HeadingLinksPOM headingLinks = new HeadingLinksPOM(driver);
@@ -92,7 +94,7 @@ namespace Final_Project_Edgewords.StepDefinitions
             CartPagePOM cartPagePOM = new CartPagePOM(driver);
             cartPagePOM.RemoveItem();
         }
-
+        //This function ensures the account can be logged out no matter which page you started from ready for the next clean test
         public void LogOut()
         {
             HeadingLinksPOM headingLinks = new HeadingLinksPOM(driver);

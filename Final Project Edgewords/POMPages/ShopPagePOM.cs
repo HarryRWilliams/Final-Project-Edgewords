@@ -1,9 +1,4 @@
 ﻿using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Final_Project_Edgewords.Base_Methods.HelpfulMethods;
 
 namespace Final_Project_Edgewords.POMPages
@@ -22,6 +17,5 @@ namespace Final_Project_Edgewords.POMPages
             addBeanieToCart.Click(); //click on the add to cart option under the beanie
             WaitForElmStatic(driver, 10, By.LinkText("View cart")); //then wait for view cart to appear
         }
-        string ef;
     }
 }

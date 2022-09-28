@@ -14,6 +14,7 @@ namespace Final_Project_Edgewords.POMPages
         {
             this.driver = driver;
         }
+        //These locators find the fields of the forms
         //Locator
         IWebElement firstNameField => driver.FindElement(By.Id("billing_first_name"));
         IWebElement lastNameField => driver.FindElement(By.Id("billing_last_name"));
@@ -21,10 +22,9 @@ namespace Final_Project_Edgewords.POMPages
         IWebElement townName => driver.FindElement(By.Id("billing_city"));
         IWebElement postcode => driver.FindElement(By.Id("billing_postcode"));
         IWebElement number => driver.FindElement(By.Id("billing_phone"));
-
-        IWebElement checkPayment => driver.FindElement(By.CssSelector("#payment > ul > li.wc_payment_method.payment_method_cheque"));
-        IWebElement tempOrderOptCheck => driver.FindElement(By.XPath("//*[@id=\"payment\"]/ul/li[2]"));
-        IWebElement placeOrder => driver.FindElement(By.Id("place_order"));//*[@id="payment_method_cheque"]
+        //These locators click on the buttons
+        IWebElement checkPayment => driver.FindElement(By.CssSelector("#payment > ul > li.wc_payment_method.payment_method_cheque")); //This clicks the checkPayment options
+        IWebElement placeOrder => driver.FindElement(By.Id("place_order"));
 
 
         public void FillCheckoutForm() //this clears the already entered information and enters the correct details
@@ -42,13 +42,9 @@ namespace Final_Project_Edgewords.POMPages
             number.Clear();
             number.SendKeys("12345678910");
         }
-        public void CheckPayments()
+        public void CheckPayments() //This clicks the check payments option
         {
             checkPayment.Click();
-        }
-        public void ed()
-        {
-            tempOrderOptCheck.Click();
         }
         public void PlaceOrder() //this redirects to the order page
         {

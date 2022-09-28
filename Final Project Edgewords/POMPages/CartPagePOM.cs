@@ -9,8 +9,6 @@ namespace Final_Project_Edgewords.POMPages
     internal class CartPagePOM
     {
         IWebDriver driver;
-        private readonly ScenarioContext _scenarioContext;
-        string _browser;
         public CartPagePOM(IWebDriver driver)
         {
             this.driver = driver;
@@ -25,7 +23,7 @@ namespace Final_Project_Edgewords.POMPages
         IWebElement shipingPrice => driver.FindElement(By.CssSelector("#shipping_method > li > label > span > bdi")); //this locates the shipping price
         IWebElement totalField => driver.FindElement(By.CssSelector(".> tr.order-total > td")); //this locates the total price
         IWebElement removeCouponLink => driver.FindElement(By.CssSelector(".woocommerce-remove-coupon"));
-        IWebElement removeItem => driver.FindElement(By.CssSelector(".remove"));
+        IWebElement removeItem => driver.FindElement(By.CssSelector(".remove")); //This selects the x icon next to a item
 
 
         public void ProceedToCheckout() //This goes to checkout page
@@ -34,9 +32,9 @@ namespace Final_Project_Edgewords.POMPages
         }
         public void TakePicOfPrice(string browser,string coupon) //this takes a picture of the price table
         {
-            if (browser != "firefox")
+            if (browser != "firefox") //if the driver is firefox there is no 
             {
-                SettingUpScreenhot(priceTable);
+                SettingUpScreenhot(priceTable,driver);
             }
             TakeScreenshotElement(priceTable, "Cart"+coupon);
         }

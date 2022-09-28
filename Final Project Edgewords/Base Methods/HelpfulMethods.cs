@@ -1,13 +1,7 @@
-﻿using Final_Project_Edgewords.POMPages;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Final_Project_Edgewords.Base_Methods
 {
@@ -22,10 +16,10 @@ namespace Final_Project_Edgewords.Base_Methods
             {
                 myWait.Until(drv => drv.FindElement(locator).Displayed);
             } 
-            catch (WebDriverTimeoutException e)
+            catch (WebDriverTimeoutException Timeout)
             {
                 Console.WriteLine("Timeout: Retrying");
-                Console.WriteLine("Stacktrace:"+e);
+                Console.WriteLine("Stacktrace:"+Timeout);
                myWait.Until(drv => drv.FindElement(locator).Displayed);
             }
         }
@@ -38,7 +32,7 @@ namespace Final_Project_Edgewords.Base_Methods
             file.SaveAsFile(@"C:\Screenshots\" + Filename + ".png", ScreenshotImageFormat.Png);
             TestContext.AddTestAttachment(@"C:\Screenshots\" + Filename + ".png");
         }
-        public static void SettingUpScreenhot(IWebElement elementToCapture)
+        public static void SettingUpScreenhot(IWebElement elementToCapture,IWebDriver driver) //This scrolls to the element for edge and chrome drivers
         {
             new Actions(driver).ScrollToElement(elementToCapture).Build().Perform();
             IJavaScriptExecutor js = driver as IJavaScriptExecutor;

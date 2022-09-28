@@ -10,14 +10,13 @@ namespace Final_Project_Edgewords.POMPages
     internal class HeadingLinksPOM
     {
         IWebDriver driver;
-        public HeadingLinksPOM(IWebDriver driver)
+        public HeadingLinksPOM(IWebDriver driver) //This POM page exists to remove awkwardness in accessing random POM pages
         {
             this.driver = driver;
         }
+        //Unless specified these links go to the heading links at the top page
         IWebElement accountLink => driver.FindElement(By.LinkText("My account")); 
-
-        
-        IWebElement dismissBox => driver.FindElement(By.LinkText("Dismiss"));
+        IWebElement dismissBox => driver.FindElement(By.LinkText("Dismiss")); //This is the pop up telling the user the site is a test site
         IWebElement shopTab => driver.FindElement(By.LinkText("Shop"));
         IWebElement cartTab => driver.FindElement(By.LinkText("Cart"));
 
