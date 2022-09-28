@@ -20,11 +20,14 @@ namespace Final_Project_Edgewords.POMPages
         IWebElement accountLink => driver.FindElement(By.LinkText("My account"));
 
 
-        public int CaptureOrderNumber() //capture the order string from the page and convert it to a number
+        public int CaptureOrderNumber(string browser) //capture the order string from the page and convert it to a number
         {
-            new Actions(driver).ScrollToElement(orderNumber).Build().Perform();
-            IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-            js.ExecuteScript("arguments[0].scrollIntoView();", orderNumber);
+            if (browser != "firefox")
+            {
+                new Actions(driver).ScrollToElement(orderNumber).Build().Perform();
+                IJavaScriptExecutor js = driver as IJavaScriptExecutor;
+                js.ExecuteScript("arguments[0].scrollIntoView();", orderNumber);
+            }
             TakeScreenshotElement(orderNumber, "Order Page Number");
             string CapordernumberText = orderNumber.Text;
           //  Console.WriteLine(CapordernumberText);

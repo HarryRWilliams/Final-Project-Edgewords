@@ -76,12 +76,20 @@ namespace Final_Project_Edgewords.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Checking That a Single Item is Priced Correctly")]
-        [NUnit.Framework.CategoryAttribute("tag1")]
-        public void CheckingThatASingleItemIsPricedCorrectly()
+        [NUnit.Framework.CategoryAttribute("CheckPrice")]
+        [NUnit.Framework.TestCaseAttribute("edgewords", null)]
+        [NUnit.Framework.TestCaseAttribute("none", null)]
+        public void CheckingThatASingleItemIsPricedCorrectly(string coupon, string[] exampleTags)
         {
-            string[] tagsOfScenario = new string[] {
-                    "tag1"};
+            string[] @__tags = new string[] {
+                    "CheckPrice"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            string[] tagsOfScenario = @__tags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("coupon", coupon);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Checking That a Single Item is Priced Correctly", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 6
 this.ScenarioInitialize(scenarioInfo);
@@ -100,13 +108,10 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("I Add an Item to my Cart", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 9
- testRunner.And("I enter the Coupon Code", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("I enter the \'{0}\' Code", coupon), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 10
  testRunner.Then("the Total Price Takes 15% off of the Original Price", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 11
- testRunner.And("Logout of My Account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

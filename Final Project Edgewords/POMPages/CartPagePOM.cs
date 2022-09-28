@@ -1,5 +1,7 @@
-﻿using OpenQA.Selenium;
+﻿using Final_Project_Edgewords.StepDefinitions;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using TechTalk.SpecFlow;
 using static Final_Project_Edgewords.Base_Methods.HelpfulMethods;
 
 namespace Final_Project_Edgewords.POMPages
@@ -7,6 +9,8 @@ namespace Final_Project_Edgewords.POMPages
     internal class CartPagePOM
     {
         IWebDriver driver;
+        private readonly ScenarioContext _scenarioContext;
+        string _browser;
         public CartPagePOM(IWebDriver driver)
         {
             this.driver = driver;
@@ -20,22 +24,45 @@ namespace Final_Project_Edgewords.POMPages
         IWebElement couponDiscount => driver.FindElement(By.CssSelector(".cart-discount .woocommerce-Price-amount")); //this locates the coupon discount amount
         IWebElement shipingPrice => driver.FindElement(By.CssSelector("#shipping_method > li > label > span > bdi")); //this locates the shipping price
         IWebElement totalField => driver.FindElement(By.CssSelector(".> tr.order-total > td")); //this locates the total price
-       
+        IWebElement removeCouponLink => driver.FindElement(By.CssSelector(".woocommerce-remove-coupon"));
+        IWebElement removeItem => driver.FindElement(By.CssSelector(".remove"));
+
+
         public void ProceedToCheckout() //This goes to checkout page
         {
             proceedToCheck.Click();
         }
-        public void TakePicOfPrice() //this takes a picture of the price table
+        public void TakePicOfPrice(string browser) //this takes a picture of the price table
         {
-            new Actions(driver).ScrollToElement(priceTable).Build().Perform();
-            IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-            js.ExecuteScript("arguments[0].scrollIntoView();", priceTable);
+            if (browser != "firefox")
+            {
+                Console.WriteLine("Browser is " +browser);
+                new Actions(driver).ScrollToElement(priceTable).Build().Perform();
+                IJavaScriptExecutor js = driver as IJavaScriptExecutor;
+                js.ExecuteScript("arguments[0].scrollIntoView();", priceTable);
+            }
             TakeScreenshotElement(priceTable, "cart");
         }
-        public void EnterCouponCode() //this enters the coupon
+        public bool EnterCouponCode(string coupon) //this enters the coupon
         {
-            couponCodeField.SendKeys("edgewords");
+           // couponCodeField.SendKeys("edgewords");
+            couponCodeField.SendKeys(coupon);
             submitCoupon.Click();
+            try
+            {
+                WaitForElmStatic(driver, 3, By.ClassName("woocommerce-error"));
+                //if a login failure alert is created then login was not successful
+                IWebElement failurePopUp = driver.FindElement(By.ClassName("woocommerce-error"));
+            }
+            catch (Exception)
+            {
+                //No alert so catch error
+                //We must have logged in 
+                Console.WriteLine("Returning true - did find coup");
+                return true;
+            }
+            Console.WriteLine("Returning false - didn't find coup in");
+            return false; //If there was an alert we didn't login
         }
         public string CaptureSubTotal() //This places the site's subtotal into a varaible 
         {
@@ -53,6 +80,16 @@ namespace Final_Project_Edgewords.POMPages
         public string CaptureTotalPrice() //This places the site's total price into a varaible 
         {
             return totalField.Text;
+        }
+
+        public void RemoveCoupon()
+        {
+            removeCouponLink.Click();
+        }
+
+        public void RemoveItem()
+        {
+            removeItem.Click();
         }
     }
 }

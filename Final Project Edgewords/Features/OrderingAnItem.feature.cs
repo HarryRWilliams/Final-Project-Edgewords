@@ -76,11 +76,11 @@ namespace Final_Project_Edgewords.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Creating An order with a Retainable Number")]
-        [NUnit.Framework.CategoryAttribute("tag1")]
+        [NUnit.Framework.CategoryAttribute("OrderItem")]
         public void CreatingAnOrderWithARetainableNumber()
         {
             string[] tagsOfScenario = new string[] {
-                    "tag1"};
+                    "OrderItem"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Creating An order with a Retainable Number", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 6

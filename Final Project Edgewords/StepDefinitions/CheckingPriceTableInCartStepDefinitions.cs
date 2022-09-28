@@ -6,6 +6,7 @@ using TechTalk.SpecFlow;
 using NUnit.Framework;
 using static Final_Project_Edgewords.Base_Methods.HelpfulMethods;
 using Newtonsoft.Json.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 [assembly: Parallelizable(ParallelScope.Fixtures)]
 [assembly: LevelOfParallelism(2)]
@@ -18,6 +19,8 @@ namespace Final_Project_Edgewords.StepDefinitions
         private readonly ScenarioContext _scenarioContext;
         private IWebDriver _driver;
         private string _baseURL;
+        private string couponWord;
+        private string browser;
         //This POM page is used across multiple steps and thus is defined here
         CartPagePOM cartPage;
 
@@ -31,6 +34,7 @@ namespace Final_Project_Edgewords.StepDefinitions
             this._driver = (IWebDriver)_scenarioContext["mydriver"];
             this._baseURL = (string)_scenarioContext["myurl"];
             cartPage = new CartPagePOM(_driver);
+            this.browser = (string)_scenarioContext["myBrowser"];
         }             
         
         [Given(@"I have Logged into my Account")]
@@ -43,11 +47,9 @@ namespace Final_Project_Edgewords.StepDefinitions
            // _driver.Url = ("https://www.edgewordstraining.co.uk/demo-site//my-account/");
              _driver.Url = (_baseURL + "//my-account/");
             LoginPagePOM login = new LoginPagePOM(_driver);
-            // bool DidWeLogin = login.LoginWithValidCredentials(username, password); 
-            bool DidWeLogin = login.LoginWithValidCredentials("harry.williams@nfocus.co.uk", "Passforex1");
             try
             {
-                Assert.IsTrue(DidWeLogin, "We did not login"); //If no warning message appears then login was successful otherwise the test has failed
+                Assert.IsTrue(login.LoginWithValidCredentials(username, password), "We did not login"); //If no warning message appears then login was successful otherwise the test has failed
             }
             catch
             {
@@ -65,27 +67,45 @@ namespace Final_Project_Edgewords.StepDefinitions
             headers.ClickCart();
         }
 
-        [When(@"I enter the Coupon Code")] 
-        public void WhenIEnterTheCouponCode()
+        //read in the word from the tested row
+        [When(@"I enter the '([^']*)' Code")]
+        public void WhenIEnterTheCode(string tableWord)
         {
-            cartPage.EnterCouponCode();
+            couponWord = tableWord; //asign the word from the feature file to a strong
+            Console.WriteLine("Coupon read in is " + tableWord);
+            try
+            {
+                Assert.IsTrue(cartPage.EnterCouponCode(tableWord)); //enter the feature file word into the coupon field)
+            }
+            catch
+            {
+                Assert.Fail("Coupon was invalid");
+            }
         }
 
         [Then(@"the Total Price Takes (.*)% off of the Original Price")]
         public void ThenTheTotalPriceTakesOffOfTheOriginalPrice(int percentage)
         {
-            cartPage.TakePicOfPrice(); //A screenshot is taken of the price table element
+            Console.WriteLine("Browser from def is" + browser);
+            cartPage.TakePicOfPrice(browser); //A screenshot is taken of the price table element
             string subTotalText = cartPage.CaptureSubTotal(); //The text in the subtotal field is captured and converted into a useable number rather than a word
             Console.WriteLine("Sub Total found is " + subTotalText);
             decimal originalPriceNum = ConvertPriceToDec(subTotalText); 
             decimal discountAmount = originalPriceNum * percentage / 100; //the discount amount is calculated by the original price / the percent given in the feature file * 100
             decimal priceWithDiscount = originalPriceNum - discountAmount; //This amount is then taken from the original price
-            WaitForElmStatic(_driver, 3, By.CssSelector(".cart-discount .woocommerce-Price-amount"));
+           
+            
+            
+            WaitForElmStatic(_driver, 1, By.CssSelector(".cart-discount .woocommerce-Price-amount"));
             string siteCalculatedDiscount = cartPage.CaptureCouponDiscountField(); //when the coupon has been entered the new field added is captured and converted
+            Console.WriteLine("Coupon word entered was " + couponWord);
+            cartPage.RemoveCoupon();
+            if (couponWord !="edgewords" && siteCalculatedDiscount != null)
+            {
+                Assert.Fail("Coupon should not have applied");
+            }
             Console.WriteLine("Site's calculated discount amount is : " + siteCalculatedDiscount);
             decimal siteCalcDiscNum = ConvertPriceToDec(siteCalculatedDiscount); 
-
-
             try //the discount amount should be equal to the sum calculated above if it is not then the test fails
             {
                 Console.WriteLine("Original price is " + originalPriceNum + " Discount amount is " + discountAmount + " Site calculated discount is " + siteCalcDiscNum);
@@ -93,7 +113,7 @@ namespace Final_Project_Edgewords.StepDefinitions
             }
             catch
             {
-               decimal actualDiscountPercent = siteCalcDiscNum / originalPriceNum * 100; //this works out what discount percent the coupon did take off
+                decimal actualDiscountPercent = siteCalcDiscNum / originalPriceNum * 100; //this works out what discount percent the coupon did take off
                 Assert.Fail("Site does not give " + percentage + "% off instead it was " + actualDiscountPercent +"%");
             }
             //Assert.That(discountAmount, Is.EqualTo(siteCalcDiscNum));
@@ -107,15 +127,6 @@ namespace Final_Project_Edgewords.StepDefinitions
             Console.WriteLine("Site calculated total is " + siteCalcTot);
             decimal siteCalcTotNum = ConvertPriceToDec(siteCalcTot);
               Assert.That(siteCalcTotNum, Is.EqualTo(TotalPrice)); //if these are not the same then the test will fail
-        }
-        [Then(@"Logout of My Account")]
-        public void ThenLogoutOfMyAccount() //the relevent elements are captured and the website is logged out of
-        {
-            HeadingLinksPOM headingLinks = new HeadingLinksPOM(_driver);
-            headingLinks.ClickMyAccount();
-            MyAcountPOM myAcountPOM = new MyAcountPOM(_driver);
-            myAcountPOM.ClickLogout();
-            Assert.Pass("The site correctly calculated the costs");
         }
 
         [Then(@"I am given an order number which matches between the order and account page")]
@@ -133,15 +144,17 @@ namespace Final_Project_Edgewords.StepDefinitions
             checkoutPage.PlaceOrder();
             OrderPagePOM order = new OrderPagePOM(_driver);
             Thread.Sleep(1000);
+           // WaitForElmStatic(_driver, 1, By.CssSelector(".order > strong"));
 
-            int recievedOrderNumber = order.CaptureOrderNumber(); //the order page will give an order number which is captured
+            int recievedOrderNumber = order.CaptureOrderNumber(browser); //the order page will give an order number which is captured
             Console.WriteLine("Order number from Order Page is" + recievedOrderNumber);
             HeadingLinksPOM headingLinks = new HeadingLinksPOM(_driver);
             headingLinks.ClickMyAccount();
             MyAcountPOM myAcount = new MyAcountPOM(_driver);
             myAcount.ClickOrders();
-            int accountOrderNumber = myAcount.GetOrderNumber(); //from the account page an order number will be displayed again and captured
+            int accountOrderNumber = myAcount.GetOrderNumber(browser); //from the account page an order number will be displayed again and captured
             Console.WriteLine("Order number from My Account is " + accountOrderNumber);
+
             try //if the two order numbers are not equal the test will fail
             {
                 Assert.That(recievedOrderNumber, Is.EqualTo(accountOrderNumber));

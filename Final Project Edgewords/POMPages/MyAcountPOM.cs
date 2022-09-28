@@ -25,11 +25,12 @@ namespace Final_Project_Edgewords.POMPages
         {
             orders.Click();
         }
-        public int GetOrderNumber() //this goes to the order number section on the website trims it to just the number and converts the string to a number
+        public int GetOrderNumber(string browser) //this goes to the order number section on the website trims it to just the number and converts the string to a number
         {
-            new Actions(driver).ScrollToElement(orderNumberCapture).Build().Perform();
-            IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-            js.ExecuteScript("arguments[0].scrollIntoView();", orderNumberCapture);
+            if (browser != "firefox")
+            {
+                
+            }
             TakeScreenshotElement(orderNumberCapture, "Acount Page Order Number");
             string orderNumberText = orderNumberCapture.Text.Trim(new Char[] { '#' });
             //Console.WriteLine(orderNumberText);

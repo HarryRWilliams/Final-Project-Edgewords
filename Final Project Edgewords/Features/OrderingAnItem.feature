@@ -2,7 +2,7 @@
 
 This feature checks that an item can be ordered and that the order number is retained
 
-@tag1
+@OrderItem
 Scenario: Creating An order with a Retainable Number
 	Given I have Logged into my Account
 	When I Add an Item to my Cart
