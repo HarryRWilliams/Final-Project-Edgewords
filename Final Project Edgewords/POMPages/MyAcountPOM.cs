@@ -29,7 +29,7 @@ namespace Final_Project_Edgewords.POMPages
         {
             if (browser != "firefox")
             {
-                
+                SettingUpScreenhot(orderNumberCapture);
             }
             TakeScreenshotElement(orderNumberCapture, "Acount Page Order Number");
             string orderNumberText = orderNumberCapture.Text.Trim(new Char[] { '#' });

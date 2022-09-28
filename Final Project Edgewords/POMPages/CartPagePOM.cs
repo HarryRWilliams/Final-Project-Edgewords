@@ -32,16 +32,13 @@ namespace Final_Project_Edgewords.POMPages
         {
             proceedToCheck.Click();
         }
-        public void TakePicOfPrice(string browser) //this takes a picture of the price table
+        public void TakePicOfPrice(string browser,string coupon) //this takes a picture of the price table
         {
             if (browser != "firefox")
             {
-                Console.WriteLine("Browser is " +browser);
-                new Actions(driver).ScrollToElement(priceTable).Build().Perform();
-                IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-                js.ExecuteScript("arguments[0].scrollIntoView();", priceTable);
+                SettingUpScreenhot(priceTable);
             }
-            TakeScreenshotElement(priceTable, "cart");
+            TakeScreenshotElement(priceTable, "Cart"+coupon);
         }
         public bool EnterCouponCode(string coupon) //this enters the coupon
         {

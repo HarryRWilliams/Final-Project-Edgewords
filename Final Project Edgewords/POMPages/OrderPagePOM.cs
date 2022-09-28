@@ -24,9 +24,7 @@ namespace Final_Project_Edgewords.POMPages
         {
             if (browser != "firefox")
             {
-                new Actions(driver).ScrollToElement(orderNumber).Build().Perform();
-                IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-                js.ExecuteScript("arguments[0].scrollIntoView();", orderNumber);
+                SettingUpScreenhot(orderNumber);
             }
             TakeScreenshotElement(orderNumber, "Order Page Number");
             string CapordernumberText = orderNumber.Text;

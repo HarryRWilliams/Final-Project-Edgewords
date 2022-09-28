@@ -87,7 +87,7 @@ namespace Final_Project_Edgewords.StepDefinitions
         public void ThenTheTotalPriceTakesOffOfTheOriginalPrice(int percentage)
         {
             Console.WriteLine("Browser from def is" + browser);
-            cartPage.TakePicOfPrice(browser); //A screenshot is taken of the price table element
+            cartPage.TakePicOfPrice(browser,couponWord); //A screenshot is taken of the price table element
             string subTotalText = cartPage.CaptureSubTotal(); //The text in the subtotal field is captured and converted into a useable number rather than a word
             Console.WriteLine("Sub Total found is " + subTotalText);
             decimal originalPriceNum = ConvertPriceToDec(subTotalText); 
@@ -137,17 +137,14 @@ namespace Final_Project_Edgewords.StepDefinitions
             CheckoutPage checkoutPage = new CheckoutPage(_driver);
             checkoutPage.FillCheckoutForm(); //the checkout details are filled in
             Thread.Sleep(1000);
-            //WaitForElmStatic(_driver, 10, By.Id("place_order"));
-           // checkoutPage.ed();
             checkoutPage.CheckPayments();
             //the order is placed
             checkoutPage.PlaceOrder();
             OrderPagePOM order = new OrderPagePOM(_driver);
-            Thread.Sleep(1000);
-           // WaitForElmStatic(_driver, 1, By.CssSelector(".order > strong"));
+            WaitForElmStatic(_driver, 1, By.CssSelector(".order > strong"));
 
             int recievedOrderNumber = order.CaptureOrderNumber(browser); //the order page will give an order number which is captured
-            Console.WriteLine("Order number from Order Page is" + recievedOrderNumber);
+            Console.WriteLine("Order number from Order Page is " + recievedOrderNumber);
             HeadingLinksPOM headingLinks = new HeadingLinksPOM(_driver);
             headingLinks.ClickMyAccount();
             MyAcountPOM myAcount = new MyAcountPOM(_driver);
