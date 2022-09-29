@@ -21,9 +21,10 @@ namespace Final_Project_Edgewords.POMPages
         IWebElement subTotalField => driver.FindElement(By.CssSelector("td:nth-child(2) > .woocommerce-Price-amount > bdi")); //this locates the subtotal
         IWebElement couponDiscount => driver.FindElement(By.CssSelector(".cart-discount .woocommerce-Price-amount")); //this locates the coupon discount amount
         IWebElement shipingPrice => driver.FindElement(By.CssSelector("#shipping_method > li > label > span > bdi")); //this locates the shipping price
-        IWebElement totalField => driver.FindElement(By.CssSelector(".> tr.order-total > td")); //this locates the total price
+        IWebElement totalField => driver.FindElement(By.CssSelector("#post-5 > div > div > div.cart-collaterals > div > table > tbody > tr.order-total > td > strong > span"));
         IWebElement removeCouponLink => driver.FindElement(By.CssSelector(".woocommerce-remove-coupon"));
         IWebElement removeItem => driver.FindElement(By.CssSelector(".remove")); //This selects the x icon next to a item
+
 
 
         public void ProceedToCheckout() //This goes to checkout page
