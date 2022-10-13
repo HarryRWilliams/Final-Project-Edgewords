@@ -26,5 +26,8 @@ Scenario Outline: Checking That a Single Item is Priced Correctly
 	| none      |
 
 	@OrderItem
-Scenario: Creating An order with a Retainable Number
+	Scenario: Creating An order with a Retainable Number
+	When I enter details into the order form
+	| firstName | lastName | streetAddress                  | townName           | postcode | phoneNumber |
+	| Dave      | Jones    | 11 In the Middle of our Street | Also not real town | SW1W 0NY | 12345678910 |
 	Then I am given an order number which matches between the order and account page

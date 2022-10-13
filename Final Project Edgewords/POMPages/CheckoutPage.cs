@@ -27,20 +27,20 @@ namespace Final_Project_Edgewords.POMPages
         IWebElement _placeOrder => _driver.FindElement(By.Id("place_order"));
 
 
-        public void FillCheckoutForm() //this clears the already entered information and enters the correct details
+        public void FillCheckoutForm(string[] details) //this clears the already entered information and enters the correct details using the array passed to it
         {
             _firstNameField.Clear();
-            _firstNameField.SendKeys("Ben");
+            _firstNameField.SendKeys(details[0]);
             _lastNameField.Clear();
-            _lastNameField.SendKeys("Bank");
+            _lastNameField.SendKeys(details[1]);
             _streetAddress.Clear();
-            _streetAddress.SendKeys("11 In the Middle of our Street");
+            _streetAddress.SendKeys(details[2]);
             _townName.Clear();
-            _townName.SendKeys("Also not real town");
+            _townName.SendKeys(details[3]);
             _postcode.Clear();
-            _postcode.SendKeys("SW1W 0NY");
+            _postcode.SendKeys(details[4]);
             _number.Clear();
-            _number.SendKeys("12345678910");
+            _number.SendKeys(details[5]);
         }
         public void CheckPayments() //This clicks the check payments option
         {

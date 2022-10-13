@@ -24,6 +24,7 @@ namespace Final_Project_Edgewords.StepDefinitions
         private string _browser;
         //This POM page is used across multiple steps and thus is defined here
         CartPagePOM _cartPage;
+        CheckoutPage _checkoutPage;
 
         //a constructor that sets up later needed variables
         public CheckingPriceTableInCartStepDefinitions(ScenarioContext _scenarioContext) 
@@ -34,6 +35,7 @@ namespace Final_Project_Edgewords.StepDefinitions
             this._baseURL = (string)this._scenarioContext["myurl"];
             _cartPage = new CartPagePOM(_driver);
             this._browser = (string)this._scenarioContext["myBrowser"];
+            _checkoutPage = new CheckoutPage(_driver);
         }             
         
         [Given(@"I have Logged into my Account")]
@@ -65,6 +67,7 @@ namespace Final_Project_Edgewords.StepDefinitions
         ShopPagePOM _shopPage = new ShopPagePOM(_driver);
             HeadingLinksPOM _headers = new HeadingLinksPOM(_driver);
             _headers.ClickShop();
+            //Get the item name in the table and pass it to the POM page
             foreach(TableRow row in _table.Rows)
             {
                 Console.WriteLine("Row is " + row[0]);
@@ -72,10 +75,6 @@ namespace Final_Project_Edgewords.StepDefinitions
             }
             _headers.ClickCart();
         }
-
-
-
-
 
         //read in the word from the tested row
         [When(@"I enter the '([^']*)' Code")]
@@ -92,7 +91,7 @@ namespace Final_Project_Edgewords.StepDefinitions
                 Assert.Fail("Coupon was invalid");
             }
         }
-
+        //Fail the test if the coupon was accepted
         [Then(@"the test should have failed")]
         public void ThenTheTestShouldHaveFailed()
         {
@@ -157,16 +156,28 @@ namespace Final_Project_Edgewords.StepDefinitions
             //Check that the total price is correct
             Assert.That(_siteCalcTotNum, Is.EqualTo(_TotalPrice));
         }
+        [When(@"I enter details into the order form")]
+        public void WhenIEnterDetailsIntoTheOrderForm(Table table)
+        {
+            //This creates an array and populates it using the feature table
+        string[] details = new string[7];
+            foreach (TableRow row in table.Rows)
+            {
+                for (int i = 0; i<6; i++)
+                {
+                    Console.WriteLine("Row is " + row[i]);
+                    details[i] = row[i];
+                }
+            }
+            CartPagePOM _cartPage = new CartPagePOM(_driver);
+            _cartPage.ProceedToCheckout();
+            //the checkout details are passed to the POM page to be filled in
+            _checkoutPage.FillCheckoutForm(details);
+        }
 
         [Then(@"I am given an order number which matches between the order and account page")]
         public void ThenIAmGivenAnOrderNumberWhichMatchesBetweenTheOrderAndAccountPage()
         {
-            //Go to the checkout page
-            CartPagePOM _cartPage = new CartPagePOM(_driver);
-            _cartPage.ProceedToCheckout();
-            CheckoutPage _checkoutPage = new CheckoutPage(_driver);
-            //the checkout details are filled in
-            _checkoutPage.FillCheckoutForm();
             Thread.Sleep(1000);
             //Check payments is selected
             _checkoutPage.CheckPayments();

@@ -180,7 +180,7 @@ this.FeatureBackground();
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Creating An order with a Retainable Number", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 29
-this.ScenarioInitialize(scenarioInfo);
+ this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
             {
@@ -192,7 +192,24 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 this.FeatureBackground();
 #line hidden
+                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                            "firstName",
+                            "lastName",
+                            "streetAddress",
+                            "townName",
+                            "postcode",
+                            "phoneNumber"});
+                table2.AddRow(new string[] {
+                            "Dave",
+                            "Jones",
+                            "11 In the Middle of our Street",
+                            "Also not real town",
+                            "SW1W 0NY",
+                            "12345678910"});
 #line 30
+ testRunner.When("I enter details into the order form", ((string)(null)), table2, "When ");
+#line hidden
+#line 33
  testRunner.Then("I am given an order number which matches between the order and account page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
