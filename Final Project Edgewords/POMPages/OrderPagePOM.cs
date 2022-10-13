@@ -11,25 +11,25 @@ namespace Final_Project_Edgewords.POMPages
 {
     internal class OrderPagePOM
     {
-        IWebDriver driver;
-        public OrderPagePOM(IWebDriver driver)
+        IWebDriver _driver;
+        public OrderPagePOM(IWebDriver _driver)
         {
-            this.driver = driver;
+            this._driver = _driver;
         }
-        IWebElement orderNumber => driver.FindElement(By.CssSelector(".order > strong")); //fetch the field that contains the order number
-        IWebElement orderPageTable => driver.FindElement(By.CssSelector(".order_details.woocommerce-thankyou-order-details")); //Fetches the entire table to see full details
+        IWebElement _orderNumber => _driver.FindElement(By.CssSelector(".order > strong")); //fetch the field that contains the order number
+        IWebElement _orderPageTable => _driver.FindElement(By.CssSelector(".order_details.woocommerce-thankyou-order-details")); //Fetches the entire table to see full details
 
 
-        public int CaptureOrderNumber(string browser) //capture the order string from the page and convert it to a number
+        public int CaptureOrderNumber(string _browser) //capture the order string from the page and convert it to a number
         {
-            if (browser != "firefox")
+            if (_browser != "firefox")
             {
-                SettingUpScreenhot(orderPageTable,driver);
+                SettingUpScreenhot(_orderPageTable, _driver);
             }
-            TakeScreenshotElement(orderPageTable, "Order Page Number"); //Takes a picture that gives details about the order
-            string CapordernumberText = orderNumber.Text; //retrieves the order number
-            int capOrderNumber = Convert.ToInt16(CapordernumberText); //converts the number from a string to an int
-            return capOrderNumber;
+            TakeScreenshotElement(_orderPageTable, "Order Page Number"); //Takes a picture that gives details about the order
+            string _CapordernumberText = _orderNumber.Text; //retrieves the order number
+            int _capOrderNumber = Convert.ToInt16(_CapordernumberText); //converts the number from a string to an int
+            return _capOrderNumber;
         }
     }
 }

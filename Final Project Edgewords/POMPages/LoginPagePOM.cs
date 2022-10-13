@@ -9,48 +9,48 @@ namespace Final_Project_Edgewords.POMPages
 {
     internal class LoginPagePOM
     {
-        IWebDriver driver;
+        IWebDriver _driver;
 
-        public LoginPagePOM(IWebDriver driver)
+        public LoginPagePOM(IWebDriver _driver)
         {
-            this.driver = driver;
+            this._driver = _driver;
         }
 
         //Locators
-        IWebElement usernameField => driver.FindElement(By.Id("username"));
-        IWebElement passwordField => driver.FindElement(By.Id("password"));
-        IWebElement loginButton => driver.FindElement(By.CssSelector("button[name='login']"));
+        IWebElement _usernameField => _driver.FindElement(By.Id("username"));
+        IWebElement _passwordField => _driver.FindElement(By.Id("password"));
+        IWebElement _loginButton => _driver.FindElement(By.CssSelector("button[name='login']"));
 
 
         //Service Methods
-        public LoginPagePOM SetUsername(string username) //Enter the username
+        public LoginPagePOM SetUsername(string _username) //Enter the username
         {
-            usernameField.SendKeys(username);
+            _usernameField.SendKeys(_username);
             return this;
         }
-        public LoginPagePOM SetPassword(string password)//Enter the password
+        public LoginPagePOM SetPassword(string _password)//Enter the password
         {
-            passwordField.SendKeys(password);
+            _passwordField.SendKeys(_password);
             return this;
         }
 
         public void ClickLogin() //Click login
         {
-            loginButton.Click();
+            _loginButton.Click();
         }
 
         //Helpers
 
-        public Boolean LoginWithValidCredentials(string username, string password) //this tries to enter the username and password and checks if the login was successful
+        public Boolean LoginWithValidCredentials(string _username, string _password) //this tries to enter the username and password and checks if the login was successful
         {
-            SetUsername(username);
-            SetPassword(password);
+            SetUsername(_username);
+            SetPassword(_password);
             ClickLogin();
 
             try
             {
                 //driver.SwitchTo().Alert(); //if a login failure alert is created then login was not successful
-                IWebElement failurePopUp = driver.FindElement(By.ClassName("woocommerce-error"));
+                IWebElement _failurePopUp = _driver.FindElement(By.ClassName("woocommerce-error"));
             }
             catch (Exception)
             {

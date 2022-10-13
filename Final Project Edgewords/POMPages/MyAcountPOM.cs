@@ -11,35 +11,35 @@ namespace Final_Project_Edgewords.POMPages
 {
     internal class MyAcountPOM
     {
-        IWebDriver driver;
-        public MyAcountPOM(IWebDriver driver)
+        IWebDriver _driver;
+        public MyAcountPOM(IWebDriver _driver)
         {
-            this.driver = driver;
+            this._driver = _driver;
         }
 
         //locators
-        IWebElement orders => driver.FindElement(By.LinkText("Orders")); //Link to the orders page
-        IWebElement AccountorderNumberCapture => driver.FindElement(By.CssSelector(".woocommerce-orders-table__cell-order-number > a")); //The field that stores the order num
-        IWebElement AccountorderNumberTable => driver.FindElement(By.CssSelector(".woocommerce-orders-table__cell-order-number")); //An element so the screenshot can be taken further back
-        IWebElement logout => driver.FindElement(By.LinkText("Logout")); 
+        IWebElement _orders => _driver.FindElement(By.LinkText("Orders")); //Link to the orders page
+        IWebElement _accountorderNumberCapture => _driver.FindElement(By.CssSelector(".woocommerce-orders-table__cell-order-number > a")); //The field that stores the order num
+        IWebElement _accountorderNumberTable => _driver.FindElement(By.CssSelector(".woocommerce-orders-table__cell-order-number")); //An element so the screenshot can be taken further back
+        IWebElement _logout => _driver.FindElement(By.LinkText("Logout")); 
         public void ClickOrders() //Go to orders page
         {
-            orders.Click();
+            _orders.Click();
         }
-        public int GetOrderNumber(string browser) //this goes to the order number section on the website trims it to just the number and converts the string to a number
+        public int GetOrderNumber(string _browser) //this goes to the order number section on the website trims it to just the number and converts the string to a number
         {
-            if (browser != "firefox") //The screenshot needs to be set up if Firefox is not being used
+            if (_browser != "firefox") //The screenshot needs to be set up if Firefox is not being used
             {
-                SettingUpScreenhot(AccountorderNumberTable,driver);
+                SettingUpScreenhot(_accountorderNumberTable, _driver);
             }
-            TakeScreenshotElement(AccountorderNumberTable, "Acount Page Order Number"); //Takes a picture of the number
-            string orderNumberText = AccountorderNumberCapture.Text.Trim(new Char[] { '#' }); //removes any formating to get just the number
-            int orderNumber = Convert.ToInt16(orderNumberText); //convert the number from string to an int
-            return orderNumber;
+            TakeScreenshotElement(_accountorderNumberTable, "Acount Page Order Number"); //Takes a picture of the number
+            string _orderNumberText = _accountorderNumberCapture.Text.Trim(new Char[] { '#' }); //removes any formating to get just the number
+            int _orderNumber = Convert.ToInt16(_orderNumberText); //convert the number from string to an int
+            return _orderNumber;
         }
         public void ClickLogout() //logout of account
         {
-            logout.Click();
+            _logout.Click();
         }
 
     }

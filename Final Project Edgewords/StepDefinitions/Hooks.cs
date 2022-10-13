@@ -18,55 +18,55 @@ namespace Final_Project_Edgewords.StepDefinitions
     [Binding]
     internal class Hooks
     {
-        private IWebDriver driver;
+        private IWebDriver _driver;
         private ScenarioContext _scenarioContext;
-        public Hooks(ScenarioContext scenarioContext)
+        public Hooks(ScenarioContext _passedScenarioContext)
         {
-            _scenarioContext = scenarioContext;
+            _scenarioContext = _passedScenarioContext;
 
         }
         [Before]
         public void Setup()
         {
             //The Browser is found from the secret file or console
-            string browser = Environment.GetEnvironmentVariable("BROWSER");
+            string _browser = Environment.GetEnvironmentVariable("BROWSER");
             //The options are created here so the same name can be used across cases
-            ChromeOptions Options = new ChromeOptions();
-            switch (browser)
+            ChromeOptions _options = new ChromeOptions();
+            switch (_browser)
             {
                 case "firefox":
-                    driver = new FirefoxDriver();
-                    _scenarioContext["myBrowser"] = browser;
+                    _driver = new FirefoxDriver();
+                    _scenarioContext["myBrowser"] = _browser;
                     break;
                 case "chrome":
-                    driver = new ChromeDriver();
-                    Options.AcceptInsecureCertificates = true;
-                    _scenarioContext["myBrowser"] = browser;
+                    _driver = new ChromeDriver();
+                    _options.AcceptInsecureCertificates = true;
+                    _scenarioContext["myBrowser"] = _browser;
                     break;
                 case "edge":
-                    driver = new EdgeDriver();
-                    _scenarioContext["myBrowser"] = browser;
+                    _driver = new EdgeDriver();
+                    _scenarioContext["myBrowser"] = _browser;
                     break;
                 default:
                     Console.WriteLine("No browser or unknown browser");
                     Console.WriteLine("Using Chrome");
-                    driver = new ChromeDriver();
-                    Options.AcceptInsecureCertificates = true;
-                    _scenarioContext["myBrowser"] = browser;
+                    _driver = new ChromeDriver();
+                    _options.AcceptInsecureCertificates = true;
+                    _scenarioContext["myBrowser"] = _browser;
                     break;
             }
             //This is stored in scenario context to be used later
-            _scenarioContext["mydriver"] = driver;
+            _scenarioContext["mydriver"] = _driver;
             //The URL is retrieved from the console or secret file
-             string baseUrl = Environment.GetEnvironmentVariable("BASEURL");
+             string _baseUrl = Environment.GetEnvironmentVariable("BASEURL");
             //The driver is then taken to this url
-            driver.Url = baseUrl;
+            _driver.Url = _baseUrl;
             //The URL is then stored for later use
-            _scenarioContext["myurl"] = baseUrl;
-            driver.Manage().Window.Maximize();
-            HeadingLinksPOM header = new HeadingLinksPOM(driver);
+            _scenarioContext["myurl"] = _baseUrl;
+            _driver.Manage().Window.Maximize();
+            HeadingLinksPOM _header = new HeadingLinksPOM(_driver);
             //The pop up informing about the site being a test site is dismissed
-            header.ClickDismiss();
+            _header.ClickDismiss();
         }
         [After("@CheckPrice")]
         public void TearDownPrice()
@@ -75,7 +75,7 @@ namespace Final_Project_Edgewords.StepDefinitions
             ClearCart();
             //The site is logged out of
             LogOut();
-            driver.Quit();
+            _driver.Quit();
         }
 
         [After("@OrderItem")]
@@ -83,25 +83,25 @@ namespace Final_Project_Edgewords.StepDefinitions
         {
             //The site is logged out of
             LogOut();
-            driver.Quit();
+            _driver.Quit();
         }
         //This function ensures the cart can be cleared no matter which page you started from ready for the next clean test
         public void ClearCart()
         {
-            HeadingLinksPOM headingLinks = new HeadingLinksPOM(driver);
+            HeadingLinksPOM _headingLinks = new HeadingLinksPOM(_driver);
             Console.WriteLine("Clearing Cart");
-            headingLinks.ClickCart();
-            CartPagePOM cartPagePOM = new CartPagePOM(driver);
-            cartPagePOM.RemoveItem();
+            _headingLinks.ClickCart();
+            CartPagePOM _cartPagePOM = new CartPagePOM(_driver);
+            _cartPagePOM.RemoveItem();
         }
         //This function ensures the account can be logged out no matter which page you started from ready for the next clean test
         public void LogOut()
         {
-            HeadingLinksPOM headingLinks = new HeadingLinksPOM(driver);
+            HeadingLinksPOM _headingLinks = new HeadingLinksPOM(_driver);
             Console.WriteLine("Logging out");
-            headingLinks.ClickMyAccount();
-            MyAcountPOM myAcountPOM = new MyAcountPOM(driver);
-            myAcountPOM.ClickLogout();
+            _headingLinks.ClickMyAccount();
+            MyAcountPOM _myAcountPOM = new MyAcountPOM(_driver);
+            _myAcountPOM.ClickLogout();
         }
     }
 }

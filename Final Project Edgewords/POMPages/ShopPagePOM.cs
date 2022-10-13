@@ -5,17 +5,27 @@ namespace Final_Project_Edgewords.POMPages
 {
     internal class ShopPagePOM
     {
-        IWebDriver driver;
-        public ShopPagePOM(IWebDriver driver)
+        IWebDriver _driver;
+        public ShopPagePOM(IWebDriver _driver)
         {
-            this.driver = driver;
+            this._driver = _driver;
         }
         //Locators
-        IWebElement addBeanieToCart => driver.FindElement(By.CssSelector(".post-27 > .button"));
-        public void ClickOnItem() //make shop page and add this to it
+        IWebElement addBeanieToCart => _driver.FindElement(By.CssSelector(".post-27 > .button"));
+        public void ClickOnItem(string _item) //make shop page and add this to it
         {
-            addBeanieToCart.Click(); //click on the add to cart option under the beanie
-            WaitForElmStatic(driver, 10, By.LinkText("View cart")); //then wait for view cart to appear
+            Console.WriteLine("In switch method");
+            switch (_item)
+            {
+                case "Beanie":
+                    Console.WriteLine("Beanie found");
+                    addBeanieToCart.Click();
+                    break;
+                default:
+                    Console.WriteLine("No item found");
+                    break;
+            }
+            WaitForElmStatic(_driver, 10, By.LinkText("View cart")); //then wait for view cart to appear
         }
     }
 }
